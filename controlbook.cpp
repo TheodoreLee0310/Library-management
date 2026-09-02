@@ -30,13 +30,15 @@ private:
     int size;
     int capacity;
     void resize();
-public:
-    Library(int max):books(new Book[max]),size(0),capacity(max){}
-    void addbook(string& title,string& author,int year,bool borrowed);
+    vector<Book*> searchauthor(string& author);
+    vector<Book*> searchtitle(string& title);
     Book* getbookid(int id);
-    vector<Book*> getbookauthor(string& author);
-    void removebook(int id);
-    void remove(string& author);
+public:
+    Library():books(new Book[5]),size(0),capacity(5){}
+    Library(int max):books(new Book[max]),size(0),capacity(max){}
+    void addbook(string& title,string& author,int year);
+    void getbook();
+    void removebook();
     void searchbook();
     bool borrowbook();
     void introducebook();
@@ -54,7 +56,7 @@ void Library::resize(){
     }
 }
 
-void Library::addbook(string& title,string& author,int year,bool borrowed){
+void Library::addbook(string& title,string& author,int year){
     resize();
     books[size].id = size;
     books[size].title = title;
@@ -65,27 +67,26 @@ void Library::addbook(string& title,string& author,int year,bool borrowed){
 }
 
 Book* Library::getbookid(int id){
-    if(id>= size||id<0) std::overflow_error("下组越界");
+    if(id>= size||id<0) throw::std::out_of_range("下组越界");
     return &books[id];
 }
 
-vector<Book*> Library::getbookauthor(string& author){
-    
-    vector<Book*>
+vector<Book*> Library::searchauthor(string& author){
+    vector<Book*> newbook;
+    for(int i = 0;i<size;++i){
+        if(books[i].author == author) newbook.push_back(&books[i]);
+    }
+    return newbook;
 }
-    void Library::removebook(int id){
-
+vector<Book*> Library::searchtitle(string& title){
+    vector<Book*> newbook;
+    for(int i = 0;i<size;++i){
+        if(books[i].title == title) newbook.push_back(&books[i]);
     }
-    void Library::remove(string& author){
+    return newbook;
+}
 
-    }
-    void Library::searchbook(){
 
-    }
-    bool Library::borrowbook(){
-
-    }
-    void Library::introducebook()
 int main(){
 
 }
