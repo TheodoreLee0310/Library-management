@@ -110,6 +110,9 @@ void Library::searchbook_author(){
     string author;
     cin>>author;
     vector<Book*> searchbook = searchauthor(author);
+    if(searchbook.empty()){
+        cout<<"没有这本个author书"<<endl;
+    }
     for(const auto& x:searchbook){
         cout<<"Id:"<<x->id<<"   Title:"<<x->title<<"    Year:"<<x->year<<"  "<<x->borrowed<<endl;
     }
@@ -118,6 +121,9 @@ void Library::searchbook_title(){
     string title;
     cin>>title;
     vector<Book*> searchbook = searchtitle(title);
+    if(searchbook.empty()){
+        cout<<"没有这本个title书"<<endl;
+    }
     for(const auto& x:searchbook){
         cout<<"Id:"<<x->id<<"   Title:"<<x->title<<"    Year:"<<x->year<<"  "<<x->borrowed<<endl;
     }
@@ -138,6 +144,10 @@ void Library::introducebook(int id){
 int main(){
     SetConsoleOutputCP(CP_UTF8);
     Library lib;
+    lib.addbook("C++","张三",2023);
+    lib.addbook("C","李四",2022);
+    lib.addbook("Java","王五",2021);
+    lib.addbook("Java","赵六",2020);
     int choice;
     cout<<"请输入您的选择："<<endl;
     cout<<"1.增加图书"<<endl;
@@ -150,9 +160,15 @@ int main(){
     do{
         cin>>choice;
         switch(choice){
-            case 1:
-                lib.addbook("C++","张三",2023);
+            case 1:{
+                cout<<"请输入title,author,year";
+                string q,w;
+                int year;
+                cin>>q>>w>>year;
+                lib.addbook(q,w,year);
+                cout<<"添加成功"<<endl;
                 break;
+            }
             case 2: {
                 int id;
                 cout<<"请输入要删除的图书id:"<<endl;
@@ -188,15 +204,5 @@ int main(){
             }
         }
     }while(choice!=7);
-    lib.addbook("C++","张三",2023);
-    lib.addbook("C","李四",2022);
-    lib.addbook("Java","王五",2021);
-    lib.addbook("Java","赵六",2020);
-    lib.removebook(2);
-    lib.getbook(0);
-    lib.checkbook(0);
-    lib.introducebook(0);
-    lib.searchbook_author();//按作者查询图书
-    lib.searchbook_title();
     return 0;
 }
