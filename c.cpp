@@ -174,6 +174,7 @@ int main(){
                 cout<<"请输入要删除的图书id:"<<endl;
                 cin>>id;
                 lib.removebook(id);
+                cout<<"删除成功"<<endl;
                 break; 
             }
             case 3: {
@@ -195,6 +196,7 @@ int main(){
             }
             case 6: {
                 int id;
+                cout<<"请输入要检查的图书id:"<<endl;
                 cin>>id;
                 lib.introducebook(id);
                 break;
