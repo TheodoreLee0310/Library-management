@@ -3,6 +3,7 @@
 #include<string>
 #include<vector>
 #include<stdexcept>
+#include<fstream>
 using namespace std;
 struct Book{
     int id;
@@ -38,6 +39,8 @@ public:
     Library():books(new Book[5]),size(0),capacity(5){}
     Library(int max):books(new Book[max]),size(0),capacity(max){}
     ~Library(){delete[]books;}
+    void savebook();
+    void loadbook();
     void addbook(const string& title,const string& author,int year);//增加图书
     void getbook(int id);//获取图书信息
     void removebook(int id);//删除图书
@@ -141,13 +144,38 @@ void Library::introducebook(int id){
     cout<<book->year<<"    Borrowed:"<<book->borrowed<<endl;
 }
 
+void Library::savebook(){
+    ofstream fout("text.txt");
+    if(fout.is_open() == false){
+        cout<<"this file donot opened"<<endl;
+        return;
+    }
+    for(int i = 0; i < size; ++i){         
+        fout << books[i].title  << "\n"
+             << books[i].author << "\n"
+             << books[i].year   << "\n"
+             << (books[i].borrowed ? 1 : 0) << "\n";
+    }
+    fout.close();
+}
+
+void Library::loadbook(){
+    ifstream fin("text.txt");
+    if(fin.is_open() == false){
+        return;
+    }
+    string t, a;
+    int y, flag;
+    while(fin >> t >> a >> y >> flag){ 
+        addbook(t, a, y);              
+        books[size-1].borrowed = flag;  // ← 把你上次的判断填进来
+    }
+    fin.close();
+}
 int main(){
     SetConsoleOutputCP(CP_UTF8);
     Library lib;
-    lib.addbook("C++","张三",2023);
-    lib.addbook("C","李四",2022);
-    lib.addbook("Java","王五",2021);
-    lib.addbook("Java","赵六",2020);
+    lib.loadbook();
     int choice;
     cout<<"请输入您的选择："<<endl;
     cout<<"1.增加图书"<<endl;
@@ -166,6 +194,7 @@ int main(){
                 int year;
                 cin>>q>>w>>year;
                 lib.addbook(q,w,year);
+                lib.savebook();
                 cout<<"添加成功"<<endl;
                 break;
             }
@@ -174,17 +203,20 @@ int main(){
                 cout<<"请输入要删除的图书id:"<<endl;
                 cin>>id;
                 lib.removebook(id);
+                lib.savebook();
                 cout<<"删除成功"<<endl;
                 break; 
             }
             case 3: {
                 cout<<"输入作者:"<<endl;
                 lib.searchbook_author();
+                cout<<"成功"<<endl;
                 break;
             }
             case 4: {
                 cout<<"输入标题:"<<endl;
                 lib.searchbook_title();
+                cout<<"成功"<<endl;
                 break;
             }
             case 5: {
@@ -192,6 +224,7 @@ int main(){
                 cout<<"请输入要检查的图书id:"<<endl;
                 cin>>id;
                 lib.checkbook(id);
+                cout<<"成功"<<endl;
                 break;
             }
             case 6: {
@@ -199,9 +232,11 @@ int main(){
                 cout<<"请输入要检查的图书id:"<<endl;
                 cin>>id;
                 lib.introducebook(id);
+                cout<<"成功"<<endl;
                 break;
             }
             case 7: {
+                cout<<"再见"<<endl;
                 break;
             }
         }
